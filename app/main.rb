@@ -32,6 +32,8 @@ client.on :message do |data|
     Timeout::timeout(2) do
       message = MQWrapper.send(data.text)
       if outgoing
+        ap "Sending #{message} at #{Time.now} because: "
+        ap data
         client.message channel: data.channel, text: message
       end
     end
