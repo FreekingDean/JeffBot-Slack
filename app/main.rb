@@ -1,3 +1,4 @@
+$stdout.sync = true
 require 'slack-ruby-client'
 require 'timeout'
 require 'awesome_print'
