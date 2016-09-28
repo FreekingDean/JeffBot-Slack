@@ -9,40 +9,33 @@ Slack.configure do |config|
 end
 
 client = Slack::RealTime::Client.new
-base_client = Slack::Web::Client.new
 
-channel = "religouscirclejerk"
+channel = ENV['RESPONSE_CHANNEL']
+
+def get_channel(channel_name)
+  Slack::Web::Client.new.channels_info(channel: data.channel).channel.name
+rescue Slack::Web::Api::Error
+  ''
+end
 
 client.on :hello do
   puts "Successfully connected, welcome '#{client.self.name}' to the '#{client.team.name}' team at https://#{client.team.domain}.slack.com."
 end
 
 client.on :message do |data|
-  puts "RCD"
   ap data
+  return if !data.has_key?('subtype')
+
   begin
-    outgoing = false
-    begin
-      if base_client.channels_info(channel: data.channel).channel.name == channel
-        outgoing = true
-      end
-      outgoing = false if data.has_key?('subtype')
-    rescue Slack::Web::Api::Error => ex
-      ap ex
-      outgoing = false
-    end
 
     Timeout::timeout(5) do
       message = MQWrapper.send(data.text)
-      if outgoing
-        ap "Sending #{message} at #{Time.now} because: "
-        ap data
+      if get_channel(data.channel) == channel
         client.message channel: data.channel, text: message
       end
     end
   rescue StandardError => ex
-    ap ex
-    client.message channel: "##{channel}", text: "ERROR - I dun got fucked: #{ex}"
+    ap "ERROR - I dun got fucked: #{ex}"
   end
 end
 
@@ -57,3 +50,4 @@ client.on :closed do |_data|
 end
 
 client.start!
+
