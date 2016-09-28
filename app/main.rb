@@ -25,7 +25,7 @@ end
 
 client.on :message do |data|
   ap data
-  next if !data.has_key?('subtype')
+  next if data.has_key?('subtype')
 
   begin
 
