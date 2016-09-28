@@ -19,12 +19,14 @@ end
 
 client.on :message do |data|
   puts "RCD"
+  ap data
   begin
     outgoing = false
     begin
       if base_client.channels_info(channel: data.channel).channel.name == channel
         outgoing = true
       end
+      outgoing = false if data.has_key?('subtype')
     rescue Slack::Web::Api::Error => ex
       ap ex
       outgoing = false
