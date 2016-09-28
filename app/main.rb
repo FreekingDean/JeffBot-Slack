@@ -12,8 +12,8 @@ client = Slack::RealTime::Client.new
 
 channel = ENV['RESPONSE_CHANNEL']
 
-def get_channel(channel_name)
-  Slack::Web::Client.new.channels_info(channel: data.channel).channel.name
+def get_channel(channel_id)
+  Slack::Web::Client.new.channels_info(channel: channel_id).channel.name
 rescue Slack::Web::Api::Error => ex
   ap ex
   ''
