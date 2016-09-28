@@ -14,7 +14,8 @@ channel = ENV['RESPONSE_CHANNEL']
 
 def get_channel(channel_name)
   Slack::Web::Client.new.channels_info(channel: data.channel).channel.name
-rescue Slack::Web::Api::Error
+rescue Slack::Web::Api::Error => ex
+  ap ex
   ''
 end
 
