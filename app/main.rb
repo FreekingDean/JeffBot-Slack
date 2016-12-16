@@ -35,7 +35,7 @@ client.on :message do |data|
 
     Timeout::timeout(5) do
       message = MQWrapper.send(data.text)
-      if get_channel(data.channel) == channel || data.text.include?(get_bot)
+      if get_channel(data.channel) == channel
         message = ":man_in_business_suit_levitating:" if rand < 0.1
         client.message channel: data.channel, text: message
       end
