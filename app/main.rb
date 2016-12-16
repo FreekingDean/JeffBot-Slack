@@ -13,10 +13,14 @@ client = Slack::RealTime::Client.new
 channel = ENV['RESPONSE_CHANNEL']
 
 def get_channel(channel_id)
-  Slack::Web::Client.new.channels_info(channel: channel_id).channel.name
+  @channel_name ||= Slack::Web::Client.new.channels_info(channel: channel_id).channel.name
 rescue Slack::Web::Api::Error => ex
   ap ex
   ''
+end
+
+def get_bot
+  @bot_id ||= Slack::Web::Client.new.users_info(user: ENV.fetch('BOT_NAME', '@jeffbot')).user.id
 end
 
 client.on :hello do
@@ -31,7 +35,7 @@ client.on :message do |data|
 
     Timeout::timeout(5) do
       message = MQWrapper.send(data.text)
-      if get_channel(data.channel) == channel
+      if get_channel(data.channel) == channel || data.text.include?(get_bot)
         message = ":man_in_business_suit_levitating:" if rand < 0.1
         client.message channel: data.channel, text: message
       end
