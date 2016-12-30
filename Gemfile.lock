@@ -50,6 +50,9 @@ GEM
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
+    jeffrey_botterhill_client (0.1.0)
+      faraday
+      faraday_middleware
     json (1.8.3)
     mime-types (2.99.1)
     minitest (5.8.4)
@@ -95,6 +98,7 @@ DEPENDENCIES
   celluloid-io
   codacy-coverage
   foreman
+  jeffrey_botterhill_client
   slack-ruby-client
 
 BUNDLED WITH
