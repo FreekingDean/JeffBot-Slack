@@ -2,14 +2,14 @@ $stdout.sync = true
 require 'slack-ruby-client'
 require 'timeout'
 require 'awesome_print'
-require 'jeffrey_botterhill_client'
+#require 'jeffrey_botterhill_client'
 require_relative 'lib/mqwrapper'
 
 Slack.configure do |config|
   config.token = ENV['SLACK_TOKEN']
 end
 
-jeffrey_botterhill_client = JeffreyBotterhillClient::Client.new(api_key: ENV.fetch('JEFFREY_BOTTERHILL_API_KEY'))
+#jeffrey_botterhill_client = JeffreyBotterhillClient::Client.new(api_key: ENV.fetch('JEFFREY_BOTTERHILL_API_KEY'))
 
 client = Slack::RealTime::Client.new
 
@@ -46,7 +46,7 @@ client.on :message do |data|
       channel_name = get_channel(data.channel)
       user_name = get_user(data.user)
 
-      jeffrey_botterhill_client.record_phrase(message: data.text, metadata: { username: user_name, channel: channel_name }, source: 'slack')
+      #jeffrey_botterhill_client.record_phrase(message: data.text, metadata: { username: user_name, channel: channel_name }, source: 'slack')
 
       if channel_name == channel || data.text.include?(get_bot)
         message = ":man_in_business_suit_levitating:" if rand < 0.1
